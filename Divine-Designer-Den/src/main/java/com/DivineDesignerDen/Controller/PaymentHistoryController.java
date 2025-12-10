@@ -5,8 +5,10 @@ import com.DivineDesignerDen.Entity.PaymentHistory;
 import com.DivineDesignerDen.Entity.TailorOrder;
 import com.DivineDesignerDen.Repository.PaymentHistoryRepository;
 import com.DivineDesignerDen.Repository.TailorOrderRepository;
+import com.DivineDesignerDen.Service.PaymentHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -15,12 +17,17 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/Payment")
+@PreAuthorize("hasRole('Admin')")
+
 public class PaymentHistoryController {
     @Autowired
     private TailorOrderRepository orderRepository;
 
     @Autowired
     private PaymentHistoryRepository paymentHistoryRepository;
+
+    @Autowired
+    private PaymentHistoryService paymentHistoryService;
 
     @PostMapping("/orders/{orderId}/pay")
     public ResponseEntity<OrderResponseDTO> addPayment(
@@ -87,6 +94,27 @@ public class PaymentHistoryController {
 
         return dto;
     }
+    @PutMapping("/update/{paymentId}")
+    public ResponseEntity<OrderResponseDTO> updatePayment(
+            @PathVariable Long paymentId,
+            @RequestBody PaymentRequestDTO dto) {
+        return ResponseEntity.ok(paymentHistoryService.updatePayment(paymentId, dto));
+    }
 
+
+    // DELETE PAYMENT
+    @DeleteMapping("/delete/{paymentId}")
+    public ResponseEntity<OrderResponseDTO> deletePayment(
+            @PathVariable Long paymentId) {
+        return ResponseEntity.ok(paymentHistoryService.deletePayment(paymentId));
+    }
+
+
+    // GET PAYMENT BY ID
+    @GetMapping("/get/{paymentId}")
+    public ResponseEntity<PaymentHistoryDTO> getPaymentById(
+            @PathVariable Long paymentId) {
+        return ResponseEntity.ok(paymentHistoryService.getPaymentById(paymentId));
+    }
 
 }

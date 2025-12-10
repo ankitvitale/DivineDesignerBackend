@@ -4,13 +4,16 @@ import com.DivineDesignerDen.DTO.GarmentDTO;
 import com.DivineDesignerDen.DTO.TailorOrderRequest;
 import com.DivineDesignerDen.Entity.Garment;
 import com.DivineDesignerDen.Entity.Measurement;
+import com.DivineDesignerDen.Entity.PaymentHistory;
 import com.DivineDesignerDen.Entity.TailorOrder;
 
+import com.DivineDesignerDen.Repository.PaymentHistoryRepository;
 import com.DivineDesignerDen.Repository.TailorOrderRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +23,9 @@ public class TailorOrderService {
     @Autowired
     private TailorOrderRepository orderRepository;
 
+    @Autowired
+    private PaymentHistoryRepository paymentHistoryRepository;
+
     public TailorOrder createOrder(TailorOrderRequest request) {
 
         TailorOrder order = new TailorOrder();
@@ -28,6 +34,14 @@ public class TailorOrderService {
         order.setMobile(request.getMobile());
         order.setOrderDate(request.getOrderDate());
         order.setDeliveryDate(request.getDeliveryDate());
+        order.setUp1(request.isUp1());
+        order.setUp2(request.isUp2());
+        order.setUp3(request.isUp3());
+        order.setUp4(request.isUp4());
+        order.setDown1(request.isDown1());
+        order.setDown2(request.isDown2());
+        order.setDown3(request.isDown3());
+        order.setDown4(request.isDown4());
         order.setTotal(request.getTotal());
         order.setAdvance(request.getAdvance());
         order.setBalance(request.getBalance());
@@ -39,19 +53,59 @@ public class TailorOrderService {
             Garment garment = new Garment();
             garment.setType(dto.getType());
             garment.setQuantity(dto.getQuantity());
-            garment.setOrder(order);
+            garment.setOrder(order); // important
 
             Measurement m = new Measurement();
-            BeanUtils.copyProperties(dto.getMeasurement(), m);
-            garment.setMeasurement(m);
+
+            m.setLambai(dto.getMeasurement().getLambai());
+            m.setPet(dto.getMeasurement().getPet());
+            m.setChati(dto.getMeasurement().getChati());
+            m.setSeat(dto.getMeasurement().getSeat());
+            m.setShoulder(dto.getMeasurement().getShoulder());
+            m.setAsteen(dto.getMeasurement().getAsteen());
+            m.setGala(dto.getMeasurement().getGala());
+            m.setKaf(dto.getMeasurement().getKaf());
+            m.setMohri(dto.getMeasurement().getMohri());
+
+            // pant/pajama
+            m.setKamar(dto.getMeasurement().getKamar());
+            m.setJang(dto.getMeasurement().getJang());
+            m.setLatka(dto.getMeasurement().getLatka());
+            m.setBottom(dto.getMeasurement().getBottom());
+            m.setGhutna(dto.getMeasurement().getGhutna());
+
+            m.setGarment(garment);    // IMPORTANT
+            garment.setMeasurement(m); // IMPORTANT
 
             garmentList.add(garment);
         }
 
         order.setGarments(garmentList);
 
-        return orderRepository.save(order);
+       // return orderRepository.save(order);
+
+
+        // SAVE order first
+        TailorOrder savedOrder = orderRepository.save(order);
+
+
+        // 🔥 ADD PAYMENT HISTORY IF ADVANCE > 0
+        if (request.getAdvance() > 0) {
+            PaymentHistory history = new PaymentHistory();
+            history.setAmount(request.getAdvance());
+            history.setPaymentMethod("CASH"); // or UPI or request.getMethod()
+            history.setPaymentDate(LocalDate.now());
+            history.setOrder(savedOrder);
+
+            paymentHistoryRepository.save(history);
+        }
+
+        return savedOrder;
+
+
     }
+
+
 
     public List<TailorOrder> getAllOrders() {
         return orderRepository.findAll();

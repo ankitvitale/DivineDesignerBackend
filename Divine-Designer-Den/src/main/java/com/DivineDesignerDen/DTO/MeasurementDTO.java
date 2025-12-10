@@ -1,67 +1,132 @@
 package com.DivineDesignerDen.DTO;
 
 public class MeasurementDTO {
-    private String lengthSize;
-    private String chestSize;
-    private String waistSize;
-    private String seatSize;
-    private String shoulderSize;
-    private String sleeveSize;
-    private String neckSize;
+    private String lambai;     // length
+    private String pet;        // belly
+    private String chati;      // chest
+    private String seat;       // seat
+    private String shoulder;   // shoulder
+    private String asteen;     // sleeve
+    private String gala;       // neck
+    private String kaf;        // cuff
+    private String mohri;      // cuff (kurta)
 
-    public String getLengthSize() {
-        return lengthSize;
+    // Pant / Pajama fields
+    private String kamar;      // waist
+    private String jang;       // thigh
+    private String latka;      // inseam
+    private String bottom;     // bottom
+    private String ghutna;
+
+    public String getLambai() {
+        return lambai;
     }
 
-    public void setLengthSize(String lengthSize) {
-        this.lengthSize = lengthSize;
+    public void setLambai(String lambai) {
+        this.lambai = lambai;
     }
 
-    public String getChestSize() {
-        return chestSize;
+    public String getPet() {
+        return pet;
     }
 
-    public void setChestSize(String chestSize) {
-        this.chestSize = chestSize;
+    public void setPet(String pet) {
+        this.pet = pet;
     }
 
-    public String getWaistSize() {
-        return waistSize;
+    public String getChati() {
+        return chati;
     }
 
-    public void setWaistSize(String waistSize) {
-        this.waistSize = waistSize;
+    public void setChati(String chati) {
+        this.chati = chati;
     }
 
-    public String getSeatSize() {
-        return seatSize;
+    public String getSeat() {
+        return seat;
     }
 
-    public void setSeatSize(String seatSize) {
-        this.seatSize = seatSize;
+    public void setSeat(String seat) {
+        this.seat = seat;
     }
 
-    public String getShoulderSize() {
-        return shoulderSize;
+    public String getShoulder() {
+        return shoulder;
     }
 
-    public void setShoulderSize(String shoulderSize) {
-        this.shoulderSize = shoulderSize;
+    public void setShoulder(String shoulder) {
+        this.shoulder = shoulder;
     }
 
-    public String getSleeveSize() {
-        return sleeveSize;
+    public String getAsteen() {
+        return asteen;
     }
 
-    public void setSleeveSize(String sleeveSize) {
-        this.sleeveSize = sleeveSize;
+    public void setAsteen(String asteen) {
+        this.asteen = asteen;
     }
 
-    public String getNeckSize() {
-        return neckSize;
+    public String getGala() {
+        return gala;
     }
 
-    public void setNeckSize(String neckSize) {
-        this.neckSize = neckSize;
+    public void setGala(String gala) {
+        this.gala = gala;
+    }
+
+    public String getKaf() {
+        return kaf;
+    }
+
+    public void setKaf(String kaf) {
+        this.kaf = kaf;
+    }
+
+    public String getMohri() {
+        return mohri;
+    }
+
+    public void setMohri(String mohri) {
+        this.mohri = mohri;
+    }
+
+    public String getKamar() {
+        return kamar;
+    }
+
+    public void setKamar(String kamar) {
+        this.kamar = kamar;
+    }
+
+    public String getJang() {
+        return jang;
+    }
+
+    public void setJang(String jang) {
+        this.jang = jang;
+    }
+
+    public String getLatka() {
+        return latka;
+    }
+
+    public void setLatka(String latka) {
+        this.latka = latka;
+    }
+
+    public String getBottom() {
+        return bottom;
+    }
+
+    public void setBottom(String bottom) {
+        this.bottom = bottom;
+    }
+
+    public String getGhutna() {
+        return ghutna;
+    }
+
+    public void setGhutna(String ghutna) {
+        this.ghutna = ghutna;
     }
 }
