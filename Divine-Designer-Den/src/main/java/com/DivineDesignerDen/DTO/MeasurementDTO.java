@@ -17,6 +17,7 @@ public class MeasurementDTO {
     private String latka;      // inseam
     private String bottom;     // bottom
     private String ghutna;
+    private String note;
 
     public String getLambai() {
         return lambai;
@@ -128,5 +129,13 @@ public class MeasurementDTO {
 
     public void setGhutna(String ghutna) {
         this.ghutna = ghutna;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

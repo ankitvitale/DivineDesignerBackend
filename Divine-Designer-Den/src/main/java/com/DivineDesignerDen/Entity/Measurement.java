@@ -27,6 +27,7 @@ public class Measurement {
     private String latka;      // inseam
     private String bottom;     // bottom
     private String ghutna;     // knee
+    private String note;
     @OneToOne
     @JsonBackReference
     private Garment garment;
@@ -148,6 +149,14 @@ public class Measurement {
 
     public void setGhutna(String ghutna) {
         this.ghutna = ghutna;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public Garment getGarment() {

@@ -73,6 +73,7 @@ public class TailorOrderService {
             m.setLatka(dto.getMeasurement().getLatka());
             m.setBottom(dto.getMeasurement().getBottom());
             m.setGhutna(dto.getMeasurement().getGhutna());
+            m.setNote(dto.getMeasurement().getNote());
 
             m.setGarment(garment);    // IMPORTANT
             garment.setMeasurement(m); // IMPORTANT
