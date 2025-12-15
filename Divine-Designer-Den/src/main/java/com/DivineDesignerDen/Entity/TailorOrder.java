@@ -34,9 +34,15 @@ public class TailorOrder {
     private double advance;
     private double balance;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<Garment> garments;
+//    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+//    @JsonManagedReference
+//    private List<Garment> garments;
+@OneToMany(
+        mappedBy = "order",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+)
+private List<Garment> garments = new ArrayList<>();
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @JsonIgnore   // prevents infinite loop

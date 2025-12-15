@@ -9,6 +9,7 @@ import com.DivineDesignerDen.Entity.TailorOrder;
 
 import com.DivineDesignerDen.Repository.PaymentHistoryRepository;
 import com.DivineDesignerDen.Repository.TailorOrderRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -103,25 +104,78 @@ public class TailorOrderService {
 
         return savedOrder;
 
-
     }
-
-
 
     public List<TailorOrder> getAllOrders() {
         return orderRepository.findAll();
     }
 
-    public TailorOrder updateOrder(Long id, TailorOrderRequest request) {
-        TailorOrder order = orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found: " + id));
 
+    @Transactional
+    public TailorOrder updateOrder(Long orderId, TailorOrderRequest request) {
+
+        TailorOrder order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        order.setOrderNo(request.getOrderNo());
+        order.setCustomerName(request.getCustomerName());
+        order.setMobile(request.getMobile());
+        order.setOrderDate(request.getOrderDate());
+        order.setDeliveryDate(request.getDeliveryDate());
+        order.setTotal(request.getTotal());
+        order.setAdvance(request.getAdvance());
+        order.setBalance(request.getBalance());
+
+        // 🔥 Remove old garments
         order.getGarments().clear();
 
-        setOrderFields(order, request);
+        for (GarmentDTO dto : request.getGarments()) {
 
-        return orderRepository.save(order);
+            Garment garment = new Garment();
+            garment.setType(dto.getType());
+            garment.setQuantity(dto.getQuantity());
+            garment.setOrder(order);
+
+            Measurement m = new Measurement();
+            m.setLambai(dto.getMeasurement().getLambai());
+            m.setPet(dto.getMeasurement().getPet());
+            m.setChati(dto.getMeasurement().getChati());
+            m.setSeat(dto.getMeasurement().getSeat());
+            m.setShoulder(dto.getMeasurement().getShoulder());
+            m.setAsteen(dto.getMeasurement().getAsteen());
+            m.setGala(dto.getMeasurement().getGala());
+            m.setKaf(dto.getMeasurement().getKaf());
+            m.setMohri(dto.getMeasurement().getMohri());
+            m.setKamar(dto.getMeasurement().getKamar());
+            m.setJang(dto.getMeasurement().getJang());
+            m.setLatka(dto.getMeasurement().getLatka());
+            m.setBottom(dto.getMeasurement().getBottom());
+            m.setGhutna(dto.getMeasurement().getGhutna());
+            m.setNote(dto.getMeasurement().getNote());
+
+            m.setGarment(garment);
+            garment.setMeasurement(m);
+
+            order.getGarments().add(garment);
+        }
+
+        // ✅ Save updated order
+        TailorOrder updatedOrder = orderRepository.save(order);
+
+        // 🔥 ADD PAYMENT HISTORY IF ADVANCE > 0
+        if (request.getAdvance() > 0) {
+            PaymentHistory history = new PaymentHistory();
+            history.setAmount(request.getAdvance());
+            history.setPaymentMethod("CASH"); // or from request
+            history.setPaymentDate(LocalDate.now());
+            history.setOrder(updatedOrder);
+
+            paymentHistoryRepository.save(history);
+        }
+
+        return updatedOrder;
     }
+
 
     public TailorOrder getOrderById(Long id) {
         return orderRepository.findById(id)
