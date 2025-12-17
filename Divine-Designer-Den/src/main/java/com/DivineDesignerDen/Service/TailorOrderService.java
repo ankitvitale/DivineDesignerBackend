@@ -125,6 +125,14 @@ public class TailorOrderService {
         order.setTotal(request.getTotal());
         order.setAdvance(request.getAdvance());
         order.setBalance(request.getBalance());
+        order.setUp1(request.isUp1());
+        order.setUp2(request.isUp2());
+        order.setUp3(request.isUp3());
+        order.setUp4(request.isUp4());
+        order.setDown1(request.isDown1());
+        order.setDown2(request.isDown2());
+        order.setDown3(request.isDown3());
+        order.setDown4(request.isDown4());
 
         // 🔥 Remove old garments
         order.getGarments().clear();
